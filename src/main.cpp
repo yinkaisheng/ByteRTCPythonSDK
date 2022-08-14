@@ -2,6 +2,9 @@
 #include "MyRTCVideoEventHandler.h"
 #include "MyRTCRoomEventHandler.h"
 #include "json/json.hpp"
+#include "spdlog/spdlog.h"
+
+#define LOGPTR spdlog::fmt_lib::ptr
 
 using namespace nlohmann;
 
@@ -19,6 +22,7 @@ BYTE_CAPI void byte_deleteRTCVideoEventHandler(MyRTCVideoEventHandler* handler)
 
 BYTE_CAPI void byte_RTCVideoEventHandler_setCallback(MyRTCVideoEventHandler* handler, ByteEventCallback callback)
 {
+	spdlog::info("{} handler {}, callback {}", __FUNCTION__, LOGPTR(handler), LOGPTR(callback));
 	handler->setEventCallback(callback);
 }
 
@@ -34,17 +38,20 @@ BYTE_CAPI void byte_deleteRTCRoomEventHandler(MyRTCRoomEventHandler* handler)
 
 BYTE_CAPI void byte_RTCRoomEventHandler_setCallback(MyRTCRoomEventHandler* handler, ByteEventCallback callback)
 {
+	spdlog::info(__FUNCTION__ " handler {}, callback {}", LOGPTR(handler), LOGPTR(callback));
 	handler->setEventCallback(callback);
 }
 
 BYTE_CAPI bytertc::IRTCVideo* byte_createRTCVideo(const char* app_id, bytertc::IRTCVideoEventHandler* event_handler, const char* parameters)
 {
 	bytertc::IRTCVideo* rtc_video = bytertc::createRTCVideo(app_id, event_handler, parameters);
+	spdlog::info("{} rtc_video {}", __FUNCTION__, LOGPTR(rtc_video));
 	return rtc_video;
 }
 
 BYTERTC_API void byte_destroyRTCVideo()
 {
+	spdlog::info(__FUNCTION__);
 	bytertc::destroyRTCVideo();
 }
 
@@ -150,6 +157,7 @@ BYTERTC_API void byte_RTCRoom_destroy(bytertc::IRTCRoom* rtc_room)
 
 BYTERTC_API void byte_RTCRoom_setRTCRoomEventHandler(bytertc::IRTCRoom* rtc_room, MyRTCRoomEventHandler* handler)
 {
+	spdlog::info("{} room {}, handler {}", __FUNCTION__, LOGPTR(rtc_room), LOGPTR(handler));
 	rtc_room->setRTCRoomEventHandler(handler);
 }
 
