@@ -83,6 +83,48 @@ BYTERTC_API void byte_RTCVideo_setRemoteStreamVideoCanvas(bytertc::IRTCVideo* rt
 	rtc_video->setRemoteStreamVideoCanvas(*stream_key, *canvas);
 }
 
+BYTERTC_API bytertc::IVideoDeviceManager* byte_RTCVideo_getVideoDeviceManager(bytertc::IRTCVideo* rtc_video)
+{
+	return rtc_video->getVideoDeviceManager();
+}
+
+BYTERTC_API int byte_IVideoDeviceManager_getVideoCaptureDevice(bytertc::IVideoDeviceManager* vdm, char device_id[bytertc::MAX_DEVICE_ID_LENGTH])
+{
+	return vdm->getVideoCaptureDevice(device_id);
+}
+
+BYTERTC_API int byte_IVideoDeviceManager_setVideoCaptureDevice(bytertc::IVideoDeviceManager* vdm, const char device_id[bytertc::MAX_DEVICE_ID_LENGTH])
+{
+	return vdm->setVideoCaptureDevice(device_id);
+}
+
+BYTERTC_API bytertc::IVideoDeviceCollection* byte_IVideoDeviceManager_enumerateVideoCaptureDevices(bytertc::IVideoDeviceManager* vdm)
+{
+	return vdm->enumerateVideoCaptureDevices();
+}
+
+BYTERTC_API int byte_IVideoDeviceCollection_getCount(bytertc::IVideoDeviceCollection* vdc)
+{
+	return vdc->getCount();
+}
+
+BYTERTC_API int byte_IVideoDeviceCollection_getDevice(bytertc::IVideoDeviceCollection* vdc, int index,
+	char device_name[bytertc::MAX_DEVICE_ID_LENGTH], char device_id[bytertc::MAX_DEVICE_ID_LENGTH])
+{
+	return vdc->getDevice(index, device_name, device_id);
+}
+
+BYTERTC_API int byte_IVideoDeviceCollection_getDeviceInfo(bytertc::IVideoDeviceCollection* vdc, int index,
+	bytertc::VideoDeviceInfo* vdi)
+{
+	return vdc->getDevice(index, vdi);
+}
+
+BYTERTC_API void byte_IVideoDeviceCollection_release(bytertc::IVideoDeviceCollection* vdc)
+{
+	vdc->release();
+}
+
 BYTERTC_API void byte_RTCVideo_startVideoCapture(bytertc::IRTCVideo* rtc_video)
 {
 	rtc_video->startVideoCapture();
