@@ -111,7 +111,7 @@ void MyRTCRoomEventHandler::onRoomStats(const bytertc::RtcRoomStats& stats)
 
 	json js;
 	json js_stats;
-	js_stats["room_id"] = stats.cpu_app_usage;
+	js_stats["cpu_app_usage"] = stats.cpu_app_usage;
 	js_stats["cpu_total_usage"] = stats.cpu_total_usage;
 	js_stats["duration"] = stats.duration;
 	js_stats["rtt"] = stats.rtt;
