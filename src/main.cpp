@@ -149,16 +149,6 @@ BYTERTC_API void byte_RTCVideo_stopVideoCapture(bytertc::IRTCVideo* rtc_video)
 	rtc_video->stopVideoCapture();
 }
 
-BYTERTC_API void byte_RTCVideo_startScreenCapture(bytertc::IRTCVideo* rtc_video, bytertc::ScreenMediaType type, void* context)
-{
-	rtc_video->startScreenCapture(type, context);
-}
-
-BYTERTC_API void byte_RTCVideo_startScreenCapture2(bytertc::IRTCVideo* rtc_video, bytertc::ScreenMediaType type, const char* bundle_id)
-{
-	rtc_video->startScreenCapture(type, bundle_id);
-}
-
 BYTERTC_API void* byte_RTCVideo_getScreenCaptureSourceList(bytertc::IRTCVideo* rtc_video)
 {
 	return rtc_video->getScreenCaptureSourceList();
