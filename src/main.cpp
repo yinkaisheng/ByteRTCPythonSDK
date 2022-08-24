@@ -191,6 +191,16 @@ BYTERTC_API void byte_RTCVideo_stopAudioCapture(bytertc::IRTCVideo* rtc_video)
 	rtc_video->stopAudioCapture();
 }
 
+BYTERTC_API void byte_RTCVideo_startCloudProxy(bytertc::IRTCVideo* rtc_video, bytertc::CloudProxyConfiguration* configuration)
+{
+	rtc_video->startCloudProxy(*configuration);
+}
+
+BYTERTC_API void byte_RTCVideo_stopCloudProxy(bytertc::IRTCVideo* rtc_video, bytertc::CloudProxyConfiguration* configuration)
+{
+	rtc_video->stopCloudProxy();
+}
+
 BYTERTC_API bytertc::IRTCRoom* byte_RTCVideo_createRTCRoom(bytertc::IRTCVideo* rtc_video, const char* room_id)
 {
 	return rtc_video->createRTCRoom(room_id);
