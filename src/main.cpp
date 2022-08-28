@@ -1,4 +1,5 @@
 #include "bytertc_video.h"
+#include "rtc/bytertc_advance.h"
 #include "MyRTCVideoEventHandler.h"
 #include "MyRTCRoomEventHandler.h"
 #include "json/json.hpp"
@@ -61,6 +62,16 @@ BYTERTC_API const char* byte_getErrorDescription(int code)
 BYTERTC_API const char* byte_getSDKVersion()
 {
 	return bytertc::getSDKVersion();
+}
+
+BYTERTC_API bytertc::IVideoFrame* byte_buildVideoFrame(bytertc::VideoFrameBuilder* builder)
+{
+	return bytertc::buildVideoFrame(*builder);
+}
+
+BYTERTC_API void byte_IVideoFrame_release(bytertc::IVideoFrame* frame)
+{
+	frame->release();
 }
 
 BYTERTC_API int byte_RTCVideo_setLocalVideoCanvas(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex index,
@@ -189,6 +200,16 @@ BYTERTC_API void byte_RTCVideo_startAudioCapture(bytertc::IRTCVideo* rtc_video)
 BYTERTC_API void byte_RTCVideo_stopAudioCapture(bytertc::IRTCVideo* rtc_video)
 {
 	rtc_video->stopAudioCapture();
+}
+
+BYTERTC_API void byte_RTCVideo_setVideoSourceType(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex stream_index, bytertc::VideoSourceType type)
+{
+	rtc_video->setVideoSourceType(stream_index, type);
+}
+
+BYTERTC_API void byte_RTCVideo_pushExternalVideoFrame(bytertc::IRTCVideo* rtc_video, bytertc::IVideoFrame* frame)
+{
+	rtc_video->pushExternalVideoFrame(frame);
 }
 
 BYTERTC_API void byte_RTCVideo_startCloudProxy(bytertc::IRTCVideo* rtc_video, bytertc::CloudProxyConfiguration* configuration)
