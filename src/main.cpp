@@ -74,6 +74,41 @@ BYTERTC_API void byte_IVideoFrame_release(bytertc::IVideoFrame* frame)
 	frame->release();
 }
 
+BYTERTC_API int byte_IVideoFrame_width(bytertc::IVideoFrame* frame)
+{
+	return frame->width();
+}
+
+BYTERTC_API int byte_IVideoFrame_height(bytertc::IVideoFrame* frame)
+{
+	return frame->height();
+}
+
+BYTERTC_API bytertc::VideoFrameType byte_IVideoFrame_frameType(bytertc::IVideoFrame* frame)
+{
+	return frame->frameType();
+}
+
+BYTERTC_API bytertc::VideoPixelFormat byte_IVideoFrame_pixelFormat(bytertc::IVideoFrame* frame)
+{
+	return frame->pixelFormat();
+}
+
+BYTERTC_API int byte_IVideoFrame_numberOfPlanes(bytertc::IVideoFrame* frame)
+{
+	return frame->numberOfPlanes();
+}
+
+BYTERTC_API uint8_t* byte_IVideoFrame_getPlaneData(bytertc::IVideoFrame* frame, int plane_index)
+{
+	return frame->getPlaneData(plane_index);
+}
+
+BYTERTC_API int byte_IVideoFrame_getPlaneStride(bytertc::IVideoFrame* frame, int plane_index)
+{
+	return frame->getPlaneStride(plane_index);
+}
+
 BYTERTC_API int byte_RTCVideo_setLocalVideoCanvas(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex index,
 	bytertc::VideoCanvas* canvas)
 {
