@@ -205,6 +205,9 @@ void MyRTCRoomEventHandler::onRemoteStreamStats(const bytertc::RemoteStreamStats
 	js_stats["remote_tx_quality"] = stats.remote_tx_quality;
 	js_stats["uid"] = stats.uid;
 	json js_video_stats;
+#if BYTE_SDK_VERSION >= 344000
+	js_video_stats["codec_type"] = stats.video_stats.codec_type;
+#endif
 	js_video_stats["decoder_output_frame_rate"] = stats.video_stats.decoder_output_frame_rate;
 	js_video_stats["e2e_delay"] = stats.video_stats.e2e_delay;
 	js_video_stats["frozen_rate"] = stats.video_stats.frozen_rate;
@@ -217,6 +220,9 @@ void MyRTCRoomEventHandler::onRemoteStreamStats(const bytertc::RemoteStreamStats
 	js_video_stats["stall_count"] = stats.video_stats.stall_count;
 	js_video_stats["stall_duration"] = stats.video_stats.stall_duration;
 	js_video_stats["stats_interval"] = stats.video_stats.stats_interval;
+#if BYTE_SDK_VERSION == 346101
+	js_video_stats["super_resolution_mode"] = stats.video_stats.super_resolution_mode;
+#endif
 	js_video_stats["video_index"] = stats.video_stats.video_index;
 	js_video_stats["video_loss_rate"] = stats.video_stats.video_loss_rate;
 	js_video_stats["width"] = stats.video_stats.width;
