@@ -304,3 +304,44 @@ BYTERTC_API void byte_RTCRoom_unpublishScreen(bytertc::IRTCRoom* rtc_room, byter
 	rtc_room->unpublishScreen(type);
 }
 
+BYTERTC_API void byte_RTCRoom_subscribeStream(bytertc::IRTCRoom* rtc_room, const char* user_id, bytertc::MediaStreamType type)
+{
+	rtc_room->subscribeStream(user_id, type);
+}
+
+BYTERTC_API void byte_RTCRoom_unsubscribeStream(bytertc::IRTCRoom* rtc_room, const char* user_id, bytertc::MediaStreamType type)
+{
+	rtc_room->unsubscribeStream(user_id, type);
+}
+
+BYTERTC_API void byte_RTCRoom_subscribeScreen(bytertc::IRTCRoom* rtc_room, const char* user_id, bytertc::MediaStreamType type)
+{
+	rtc_room->subscribeScreen(user_id, type);
+}
+
+BYTERTC_API void byte_RTCRoom_unsubscribeScreen(bytertc::IRTCRoom* rtc_room, const char* user_id, bytertc::MediaStreamType type)
+{
+	rtc_room->unsubscribeScreen(user_id, type);
+}
+
+BYTERTC_API int64_t byte_RTCRoom_sendRoomMessage(bytertc::IRTCRoom* rtc_room, const char* message)
+{
+	return rtc_room->sendRoomMessage(message);
+}
+
+BYTERTC_API int64_t byte_RTCRoom_sendRoomBinaryMessage(bytertc::IRTCRoom* rtc_room, const uint8_t* message, int size)
+{
+	return rtc_room->sendRoomBinaryMessage(size, message);
+}
+
+BYTERTC_API int64_t byte_RTCRoom_sendUserMessage(bytertc::IRTCRoom* rtc_room, const char* user_id,
+	const char* message, bytertc::MessageConfig config)
+{
+	return rtc_room->sendUserMessage(user_id, message, config);
+}
+
+BYTERTC_API int64_t byte_RTCRoom_sendUserBinaryMessage(bytertc::IRTCRoom* rtc_room, const char* user_id,
+	const uint8_t* message, int size, bytertc::MessageConfig config)
+{
+	return rtc_room->sendUserBinaryMessage(user_id, size, message, config);
+}
