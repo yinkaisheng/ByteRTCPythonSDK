@@ -65,8 +65,6 @@ public:
 	void onNetworkDetectionResult(bytertc::NetworkDetectionLinkType type, bytertc::NetworkQuality quality, int rtt, double lost_rate,
 		int bitrate, int jitter) override;
 	void onNetworkDetectionStopped(bytertc::NetworkDetectionStopReason reason) override;
-	void onPlayPublicStreamResult(const char* public_stream_id, int errorCode) override;
-	void onPublicStreamSEIMessageReceived(const char* public_stream_id, const uint8_t* message, int message_length) override;
 	void onFirstPublicStreamVideoFrameDecoded(const char* public_stream_id, const  bytertc::VideoFrameInfo& info) override;
 	void onUserStartVideoCapture(const char* room_id, const char* user_id) override;
 	void onUserStopVideoCapture(const char* room_id, const char* user_id) override;
@@ -90,10 +88,29 @@ public:
 	void onVideoFramePlayStateChanged(const char* room_id, const bytertc::RtcUser& user, bytertc::FirstFramePlayState state) override;
 	void onScreenVideoFramePlayStateChanged(const char* room_id, const bytertc::RtcUser& user, bytertc::FirstFramePlayState state) override;
 	void onFirstLocalAudioFrame(bytertc::StreamIndex index) override;
+#if BYTE_SDK_VERSION >= 347000
+	void onPlayPublicStreamResult(const char* public_stream_id, bytertc::PublicStreamErrorCode errorCode) override;
+	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, bytertc::PublicStreamErrorCode errorCode) override;
+	void onPublicStreamSEIMessageReceived(const char* public_stream_id,
+		const uint8_t* message, int message_length, bytertc::SEIMessageSourceType source_type) override;
+#else
+	void onPlayPublicStreamResult(const char* public_stream_id, int errorCode) override;
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, int errorCode) override;
+	void onPublicStreamSEIMessageReceived(const char* public_stream_id, const uint8_t* message, int message_length) override;
+#endif
 	void onFirstPublicStreamAudioFrame(const char* public_stream_id) override;
 	void onCloudProxyConnected(int interval) override;
 	void onEchoTestResult(bytertc::EchoTestResult result) override;
+
+#if BYTE_SDK_VERSION >= 347102
+	void onAudioDumpStateChanged(bytertc::AudioDumpStatus status) override;
+#endif
+
+#if BYTE_SDK_VERSION == 348102
+	void onRemoteVideoSuperResolutionModeChanged(bytertc::RemoteStreamKey stream_key, 
+		bytertc::VideoSuperResolutionMode mode, bytertc::VideoSuperResolutionModeChangedReason reason) override;
+#endif
+
 private:
 	ByteEventCallback _callback{};
 };

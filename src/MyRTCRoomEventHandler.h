@@ -20,8 +20,6 @@ public:
 	void onRemoteStreamStats(const bytertc::RemoteStreamStats& stats) override;
 	void onUserJoined(const bytertc::UserInfo& user_info, int elapsed) override;
 	void onUserLeave(const char* uid, bytertc::UserOfflineReason reason) override;
-	void onMuteAllRemoteAudio(const char* user_id, bytertc::MuteState mute_state) override;
-	void onMuteAllRemoteVideo(const char* uid, bytertc::MuteState mute) override;
 	void onStreamRemove(const bytertc::MediaStreamInfo& stream, bytertc::StreamRemoveReason reason) override;
 	void onStreamAdd(const bytertc::MediaStreamInfo& stream) override;
 	void onUserPublishStream(const char* uid, bytertc::MediaStreamType type) override;
@@ -37,11 +35,8 @@ public:
 	void onUserMessageSendResult(int64_t msgid, int error) override;
 	void onRoomMessageSendResult(int64_t msgid, int error) override;
 	void onRoomModeChanged(bytertc::RtcRoomMode mode) override;
-	void onSubscribe(const char* user_id, bool is_reconnect) override;
-	void onUnSubscribe(const char* user_id, bool is_reconnect) override;
 	void onMaximumScreenShareFpsUpdated(int fps) override;
 	void onMaximumScreenSharePixelsUpdated(int screenPixels) override;
-	void onNeedAvatar(const char* uid) override;
 	void onVideoStreamBanned(const char* uid, bool banned) override;
 	void onAVSyncStateChange(bytertc::AVSyncState state) override;
 	void onAudioStreamBanned(const char* uid, bool banned) override;
@@ -49,6 +44,14 @@ public:
 	void onForwardStreamEvent(bytertc::ForwardStreamEventInfo* infos, int info_count) override;
 	void onNetworkQuality(const bytertc::NetworkQualityStats& local_quality,
 		const bytertc::NetworkQualityStats* remote_qualities, int remote_qualities_num) override;
+
+#if BYTE_SDK_VERSION < 347000
+	void onMuteAllRemoteAudio(const char* user_id, bytertc::MuteState mute_state) override;
+	void onMuteAllRemoteVideo(const char* uid, bytertc::MuteState mute) override;
+	void onSubscribe(const char* user_id, bool is_reconnect) override;
+	void onUnSubscribe(const char* user_id, bool is_reconnect) override;
+	void onNeedAvatar(const char* uid) override;
+#endif
 
 private:
 	ByteEventCallback _callback{};

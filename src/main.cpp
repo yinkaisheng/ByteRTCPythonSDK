@@ -9,6 +9,11 @@
 
 using namespace nlohmann;
 
+BYTERTC_API int byte_setEnv(bytertc::Env env)
+{
+	return bytertc::setEnv(env);
+}
+
 BYTERTC_API MyRTCVideoEventHandler* byte_createRTCVideoEventHandler()
 {
 	return new MyRTCVideoEventHandler();
@@ -137,11 +142,19 @@ BYTERTC_API int byte_RTCVideo_setVideoEncoderConfigSolutions(bytertc::IRTCVideo*
 	return rtc_video->setVideoEncoderConfig(index, solutions, solutions_num);
 }
 
+#if BYTE_SDK_VERSION >= 347000
+BYTERTC_API void byte_RTCVideo_setRemoteVideoCanvas(bytertc::IRTCVideo* rtc_video,
+	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
+{
+	rtc_video->setRemoteVideoCanvas(*stream_key, *canvas);
+}
+#else
 BYTERTC_API void byte_RTCVideo_setRemoteStreamVideoCanvas(bytertc::IRTCVideo* rtc_video,
-		bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
+	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
 {
 	rtc_video->setRemoteStreamVideoCanvas(*stream_key, *canvas);
 }
+#endif
 
 BYTERTC_API bytertc::IVideoDeviceManager* byte_RTCVideo_getVideoDeviceManager(bytertc::IRTCVideo* rtc_video)
 {
@@ -241,6 +254,13 @@ BYTERTC_API void byte_RTCVideo_setVideoSourceType(bytertc::IRTCVideo* rtc_video,
 {
 	rtc_video->setVideoSourceType(stream_index, type);
 }
+
+#if BYTE_SDK_VERSION == 348102
+BYTERTC_API int byte_RTCVideo_setRemoteVideoSuperResolution(bytertc::IRTCVideo* rtc_video, bytertc::RemoteStreamKey* stream_key, bytertc::VideoSuperResolutionMode mode)
+{
+	return rtc_video->setRemoteVideoSuperResolution(*stream_key, mode);
+}
+#endif
 
 BYTERTC_API void byte_RTCVideo_pushExternalVideoFrame(bytertc::IRTCVideo* rtc_video, bytertc::IVideoFrame* frame)
 {

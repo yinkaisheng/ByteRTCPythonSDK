@@ -220,7 +220,7 @@ void MyRTCRoomEventHandler::onRemoteStreamStats(const bytertc::RemoteStreamStats
 	js_video_stats["stall_count"] = stats.video_stats.stall_count;
 	js_video_stats["stall_duration"] = stats.video_stats.stall_duration;
 	js_video_stats["stats_interval"] = stats.video_stats.stats_interval;
-#if BYTE_SDK_VERSION == 346101
+#if BYTE_SDK_VERSION == 348102
 	js_video_stats["super_resolution_mode"] = stats.video_stats.super_resolution_mode;
 #endif
 	js_video_stats["video_index"] = stats.video_stats.video_index;
@@ -257,32 +257,6 @@ void MyRTCRoomEventHandler::onUserLeave(const char* user_id, bytertc::UserOfflin
 	json js;
 	js["user_id"] = user_id;
 	js["reason"] = reason;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-void MyRTCRoomEventHandler::onMuteAllRemoteAudio(const char* user_id, bytertc::MuteState mute_state)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["user_id"] = user_id;
-	js["mute_state"] = mute_state;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-void MyRTCRoomEventHandler::onMuteAllRemoteVideo(const char* user_id, bytertc::MuteState mute_state)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["user_id"] = user_id;
-	js["mute_state"] = mute_state;
 
 	std::string json_str = js.dump(JSON_INDENT);
 
@@ -572,32 +546,6 @@ void MyRTCRoomEventHandler::onRoomModeChanged(bytertc::RtcRoomMode mode)
 	CALLBACK_BLOCK_END
 }
 
-void MyRTCRoomEventHandler::onSubscribe(const char* user_id, bool is_reconnect)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["user_id"] = user_id;
-	js["is_reconnect"] = is_reconnect;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-void MyRTCRoomEventHandler::onUnSubscribe(const char* user_id, bool is_reconnect)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["user_id"] = user_id;
-	js["is_reconnect"] = is_reconnect;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
 void MyRTCRoomEventHandler::onMaximumScreenShareFpsUpdated(int fps)
 {
 	CALLBACK_BLOCK_BEGIN
@@ -616,18 +564,6 @@ void MyRTCRoomEventHandler::onMaximumScreenSharePixelsUpdated(int screen_pixels)
 
 	json js;
 	js["screen_pixels"] = screen_pixels;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-void MyRTCRoomEventHandler::onNeedAvatar(const char* user_id)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["user_id"] = user_id;
 
 	std::string json_str = js.dump(JSON_INDENT);
 
@@ -752,3 +688,73 @@ void MyRTCRoomEventHandler::onNetworkQuality(const bytertc::NetworkQualityStats&
 
 	CALLBACK_BLOCK_END
 }
+
+
+#if BYTE_SDK_VERSION < 347000
+void MyRTCRoomEventHandler::onMuteAllRemoteAudio(const char* user_id, bytertc::MuteState mute_state)
+{
+	CALLBACK_BLOCK_BEGIN
+
+		json js;
+	js["user_id"] = user_id;
+	js["mute_state"] = mute_state;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCRoomEventHandler::onMuteAllRemoteVideo(const char* user_id, bytertc::MuteState mute_state)
+{
+	CALLBACK_BLOCK_BEGIN
+
+		json js;
+	js["user_id"] = user_id;
+	js["mute_state"] = mute_state;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+
+void MyRTCRoomEventHandler::onSubscribe(const char* user_id, bool is_reconnect)
+{
+	CALLBACK_BLOCK_BEGIN
+
+		json js;
+	js["user_id"] = user_id;
+	js["is_reconnect"] = is_reconnect;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCRoomEventHandler::onUnSubscribe(const char* user_id, bool is_reconnect)
+{
+	CALLBACK_BLOCK_BEGIN
+
+		json js;
+	js["user_id"] = user_id;
+	js["is_reconnect"] = is_reconnect;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCRoomEventHandler::onNeedAvatar(const char* user_id)
+{
+	CALLBACK_BLOCK_BEGIN
+
+		json js;
+	js["user_id"] = user_id;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+#endif
+
