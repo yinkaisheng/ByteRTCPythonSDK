@@ -46,10 +46,10 @@ BYTERTC_API void byte_RTCRoomEventHandler_setCallback(MyRTCRoomEventHandler* han
 	handler->setEventCallback(callback);
 }
 
-BYTERTC_API bytertc::IRTCVideo* byte_createRTCVideo(const char* app_id, bytertc::IRTCVideoEventHandler* event_handler, const char* parameters)
+BYTERTC_API bytertc::IRTCVideo* byte_createRTCVideo(const char* app_id, MyRTCVideoEventHandler* event_handler, const char* parameters)
 {
 	bytertc::IRTCVideo* rtc_video = bytertc::createRTCVideo(app_id, event_handler, parameters);
-	spdlog::info("{} rtc_video {}", __FUNCTION__, LOGPTR(rtc_video));
+	spdlog::info("{} rtc_video {}, IRTCVideoEventHandler {}", __FUNCTION__, LOGPTR(rtc_video), LOGPTR(event_handler));
 	return rtc_video;
 }
 
@@ -125,36 +125,22 @@ BYTERTC_API int byte_RTCVideo_setVideoCaptureConfig(bytertc::IRTCVideo* rtc_vide
 	return rtc_video->setVideoCaptureConfig(*capture_config);
 }
 
-BYTERTC_API int byte_RTCVideo_setVideoEncoderConfig(bytertc::IRTCVideo* rtc_video, bytertc::VideoEncoderConfig* max_solution)
+BYTERTC_API int byte_RTCVideo_setVideoEncoderConfig(bytertc::IRTCVideo* rtc_video, bytertc::VideoEncoderConfig* encode_config)
 {
-	return rtc_video->setVideoEncoderConfig(*max_solution);
+	return rtc_video->setVideoEncoderConfig(*encode_config);
 }
 
 BYTERTC_API int byte_RTCVideo_setVideoEncoderConfigList(bytertc::IRTCVideo* rtc_video, 
-	bytertc::VideoEncoderConfig* channel_solutions, int solution_num)
+	bytertc::VideoEncoderConfig* encode_config, int config_num)
 {
-	return rtc_video->setVideoEncoderConfig(channel_solutions, solution_num);
+	return rtc_video->setVideoEncoderConfig(encode_config, config_num);
 }
 
 BYTERTC_API int byte_RTCVideo_setVideoEncoderConfigSolutions(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex index,
-		const bytertc::VideoSolution* solutions, int solutions_num)
+		const bytertc::VideoSolution* solutions, int config_num)
 {
-	return rtc_video->setVideoEncoderConfig(index, solutions, solutions_num);
+	return rtc_video->setVideoEncoderConfig(index, solutions, config_num);
 }
-
-#if BYTE_SDK_VERSION >= 347000
-BYTERTC_API void byte_RTCVideo_setRemoteVideoCanvas(bytertc::IRTCVideo* rtc_video,
-	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
-{
-	rtc_video->setRemoteVideoCanvas(*stream_key, *canvas);
-}
-#else
-BYTERTC_API void byte_RTCVideo_setRemoteStreamVideoCanvas(bytertc::IRTCVideo* rtc_video,
-	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
-{
-	rtc_video->setRemoteStreamVideoCanvas(*stream_key, *canvas);
-}
-#endif
 
 BYTERTC_API bytertc::IVideoDeviceManager* byte_RTCVideo_getVideoDeviceManager(bytertc::IRTCVideo* rtc_video)
 {
@@ -254,13 +240,6 @@ BYTERTC_API void byte_RTCVideo_setVideoSourceType(bytertc::IRTCVideo* rtc_video,
 {
 	rtc_video->setVideoSourceType(stream_index, type);
 }
-
-#if BYTE_SDK_VERSION == 348102
-BYTERTC_API int byte_RTCVideo_setRemoteVideoSuperResolution(bytertc::IRTCVideo* rtc_video, bytertc::RemoteStreamKey* stream_key, bytertc::VideoSuperResolutionMode mode)
-{
-	return rtc_video->setRemoteVideoSuperResolution(*stream_key, mode);
-}
-#endif
 
 BYTERTC_API void byte_RTCVideo_pushExternalVideoFrame(bytertc::IRTCVideo* rtc_video, bytertc::IVideoFrame* frame)
 {
@@ -365,3 +344,57 @@ BYTERTC_API int64_t byte_RTCRoom_sendUserBinaryMessage(bytertc::IRTCRoom* rtc_ro
 {
 	return rtc_room->sendUserBinaryMessage(user_id, size, message, config);
 }
+
+#if BYTE_SDK_VERSION >= 347000
+BYTERTC_API void byte_RTCVideo_setRemoteVideoCanvas(bytertc::IRTCVideo* rtc_video,
+	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
+{
+	rtc_video->setRemoteVideoCanvas(*stream_key, *canvas);
+}
+#else
+BYTERTC_API void byte_RTCVideo_setRemoteStreamVideoCanvas(bytertc::IRTCVideo* rtc_video,
+	bytertc::RemoteStreamKey* stream_key, const bytertc::VideoCanvas* canvas)
+{
+	rtc_video->setRemoteStreamVideoCanvas(*stream_key, *canvas);
+}
+#endif
+
+#if BYTE_SDK_VERSION >= 347000
+BYTERTC_API void byte_RTCVideo_enableSimulcastMode(bytertc::IRTCVideo* rtc_video, int enabled) {
+	rtc_video->enableSimulcastMode((bool)enabled);
+}
+#else
+BYTERTC_API int byte_RTCVideo_enableSimulcastMode(bytertc::IRTCVideo* rtc_video, int enabled) {
+	return rtc_video->enableSimulcastMode((bool)enabled);
+}
+#endif
+
+#if BYTE_SDK_VERSION >= 347000
+BYTERTC_API long byte_RTCVideo_takeLocalSnapshot(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex stream_index, MyRTCVideoEventHandler* callback) {
+	return rtc_video->takeLocalSnapshot(stream_index, callback);
+}
+
+BYTERTC_API long byte_RTCVideo_takeRemoteSnapshot(bytertc::IRTCVideo* rtc_video, bytertc::RemoteStreamKey* stream_key, MyRTCVideoEventHandler* callback) {
+	return rtc_video->takeRemoteSnapshot(*stream_key, callback);
+}
+#endif
+
+#if BYTE_SDK_VERSION >= 348000
+BYTERTC_API int byte_RTCVideo_setScreenVideoEncoderConfig(bytertc::IRTCVideo* rtc_video, bytertc::ScreenVideoEncoderConfig* encoder_config)
+{
+	return rtc_video->setScreenVideoEncoderConfig(*encoder_config);
+}
+#else
+BYTERTC_API int byte_RTCVideo_setScreenVideoEncoderConfig(bytertc::IRTCVideo* rtc_video, bytertc::VideoEncoderConfig* encoder_config)
+{
+	return rtc_video->setScreenVideoEncoderConfig(*encoder_config);
+}
+#endif
+
+#if BYTE_SDK_VERSION >= 348000
+BYTERTC_API int byte_RTCVideo_setRemoteVideoSuperResolution(bytertc::IRTCVideo* rtc_video, bytertc::RemoteStreamKey* stream_key, bytertc::VideoSuperResolutionMode mode)
+{
+	return rtc_video->setRemoteVideoSuperResolution(*stream_key, mode);
+}
+#endif
+

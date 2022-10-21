@@ -3,6 +3,9 @@
 #include "common.h"
 
 class MyRTCVideoEventHandler : public bytertc::IRTCVideoEventHandler
+#if BYTE_SDK_VERSION >= 347000
+							 , public bytertc::ISnapshotResultCallback
+#endif
 {
 public:
 	virtual ~MyRTCVideoEventHandler();
@@ -88,6 +91,10 @@ public:
 	void onVideoFramePlayStateChanged(const char* room_id, const bytertc::RtcUser& user, bytertc::FirstFramePlayState state) override;
 	void onScreenVideoFramePlayStateChanged(const char* room_id, const bytertc::RtcUser& user, bytertc::FirstFramePlayState state) override;
 	void onFirstLocalAudioFrame(bytertc::StreamIndex index) override;
+	void onFirstPublicStreamAudioFrame(const char* public_stream_id) override;
+	void onCloudProxyConnected(int interval) override;
+	void onEchoTestResult(bytertc::EchoTestResult result) override;
+
 #if BYTE_SDK_VERSION >= 347000
 	void onPlayPublicStreamResult(const char* public_stream_id, bytertc::PublicStreamErrorCode errorCode) override;
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, bytertc::PublicStreamErrorCode errorCode) override;
@@ -98,16 +105,22 @@ public:
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, int errorCode) override;
 	void onPublicStreamSEIMessageReceived(const char* public_stream_id, const uint8_t* message, int message_length) override;
 #endif
-	void onFirstPublicStreamAudioFrame(const char* public_stream_id) override;
-	void onCloudProxyConnected(int interval) override;
-	void onEchoTestResult(bytertc::EchoTestResult result) override;
 
-#if BYTE_SDK_VERSION >= 347102
+#if BYTE_SDK_VERSION >= 347000
 	void onAudioDumpStateChanged(bytertc::AudioDumpStatus status) override;
 #endif
 
-#if BYTE_SDK_VERSION == 348102
-	void onRemoteVideoSuperResolutionModeChanged(bytertc::RemoteStreamKey stream_key, 
+#if BYTE_SDK_VERSION >= 347000
+	//ISnapshotResultCallback
+	void onTakeLocalSnapshotResult(long taskId, bytertc::StreamIndex stream_index, bytertc::IVideoFrame* frame, int errorCode) override;
+	void onTakeRemoteSnapshotResult(long taskId, bytertc::RemoteStreamKey stream_key, bytertc::IVideoFrame* frame, int errorCode) override;
+#endif
+
+#if BYTE_SDK_VERSION >= 348000
+	void onNetworkTimeSynchronized() override;
+	void onLicenseWillExpire(int days) override;
+	void onExternalScreenFrameUpdate(bytertc::FrameUpdateInfo frameUpdateInfo) override;
+	void onRemoteVideoSuperResolutionModeChanged(bytertc::RemoteStreamKey stream_key,
 		bytertc::VideoSuperResolutionMode mode, bytertc::VideoSuperResolutionModeChangedReason reason) override;
 #endif
 

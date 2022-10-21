@@ -1078,86 +1078,6 @@ void MyRTCVideoEventHandler::onFirstLocalAudioFrame(bytertc::StreamIndex index)
 	CALLBACK_BLOCK_END
 }
 
-void MyRTCVideoEventHandler::onPlayPublicStreamResult(const char* public_stream_id, 
-#if BYTE_SDK_VERSION >= 347000
-	bytertc::PublicStreamErrorCode errorCode
-#else
-	int errorCode
-#endif
-)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["public_stream_id"] = public_stream_id;
-	js["errorCode"] = errorCode;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-void MyRTCVideoEventHandler::onPushPublicStreamResult(const char* room_id, const char* public_streamid, 
-#if BYTE_SDK_VERSION >= 347000
-	bytertc::PublicStreamErrorCode errorCode
-#else
-	int errorCode
-#endif
-	)
-{
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["room_id"] = room_id;
-	js["public_streamid"] = public_streamid;
-	js["errorCode"] = errorCode;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-
-#if BYTE_SDK_VERSION >= 347000
-void MyRTCVideoEventHandler::onPublicStreamSEIMessageReceived(const char* public_stream_id,
-	const uint8_t* message, int message_length, bytertc::SEIMessageSourceType source_type) {
-	CALLBACK_BLOCK_BEGIN
-
-	json js;
-	js["public_stream_id"] = public_stream_id;
-	json js_message;
-	for (int n = 0; n < message_length; ++n)
-	{
-		js_message.push_back(message[n]);
-	}
-	js["message"] = js_message;
-	js["message_length"] = message_length;
-	js["source_type"] = source_type;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-#else
-void MyRTCVideoEventHandler::onPublicStreamSEIMessageReceived(const char* public_stream_id, const uint8_t* message, int message_length)
-{
-	CALLBACK_BLOCK_BEGIN
-
-		json js;
-	js["public_stream_id"] = public_stream_id;
-	json js_message;
-	for (int n = 0; n < message_length; ++n)
-	{
-		js_message.push_back(message[n]);
-	}
-	js["message"] = js_message;
-	js["message_length"] = message_length;
-
-	std::string json_str = js.dump(JSON_INDENT);
-
-	CALLBACK_BLOCK_END
-}
-#endif
-
 void MyRTCVideoEventHandler::onFirstPublicStreamAudioFrame(const char* public_stream_id)
 {
 	CALLBACK_BLOCK_BEGIN
@@ -1194,7 +1114,73 @@ void MyRTCVideoEventHandler::onEchoTestResult(bytertc::EchoTestResult result)
 	CALLBACK_BLOCK_END
 }
 
-#if BYTE_SDK_VERSION >= 347102
+void MyRTCVideoEventHandler::onPlayPublicStreamResult(const char* public_stream_id,
+#if BYTE_SDK_VERSION >= 347000
+	bytertc::PublicStreamErrorCode errorCode
+#else
+	int errorCode
+#endif
+)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["public_stream_id"] = public_stream_id;
+	js["errorCode"] = errorCode;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCVideoEventHandler::onPushPublicStreamResult(const char* room_id, const char* public_streamid,
+#if BYTE_SDK_VERSION >= 347000
+	bytertc::PublicStreamErrorCode errorCode
+#else
+	int errorCode
+#endif
+)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["room_id"] = room_id;
+	js["public_streamid"] = public_streamid;
+	js["errorCode"] = errorCode;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCVideoEventHandler::onPublicStreamSEIMessageReceived(const char* public_stream_id,
+	const uint8_t* message, int message_length
+#if BYTE_SDK_VERSION >= 347000
+	, bytertc::SEIMessageSourceType source_type
+#endif
+)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["public_stream_id"] = public_stream_id;
+	json js_message;
+	for (int n = 0; n < message_length; ++n)
+	{
+		js_message.push_back(message[n]);
+	}
+	js["message"] = js_message;
+	js["message_length"] = message_length;
+#if BYTE_SDK_VERSION >= 347000
+	js["source_type"] = source_type;
+#endif
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+#if BYTE_SDK_VERSION >= 347000
 void MyRTCVideoEventHandler::onAudioDumpStateChanged(bytertc::AudioDumpStatus status)
 {
 	CALLBACK_BLOCK_BEGIN
@@ -1208,13 +1194,86 @@ void MyRTCVideoEventHandler::onAudioDumpStateChanged(bytertc::AudioDumpStatus st
 }
 #endif
 
-#if BYTE_SDK_VERSION == 348102
+#if BYTE_SDK_VERSION >= 347000
+void MyRTCVideoEventHandler::onTakeLocalSnapshotResult(long taskId, bytertc::StreamIndex stream_index, bytertc::IVideoFrame* video_frame, int error_code)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["taskId"] = taskId;
+	js["stream_index"] = stream_index;
+	js["error_code"] = error_code;
+	js["video_frame"] = (size_t)video_frame->shallowCopy();
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCVideoEventHandler::onTakeRemoteSnapshotResult(long taskId, bytertc::RemoteStreamKey stream_key, bytertc::IVideoFrame* video_frame, int error_code)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["taskId"] = taskId;
+	json js_stream_key;
+	js_stream_key["room_id"] = stream_key.room_id;
+	js_stream_key["stream_index"] = stream_key.stream_index;
+	js_stream_key["user_id"] = stream_key.user_id;
+	js["stream_key"] = js_stream_key;
+	js["error_code"] = error_code;
+	js["video_frame"] = (size_t)video_frame->shallowCopy();
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+#endif
+
+#if BYTE_SDK_VERSION >= 348000
+void MyRTCVideoEventHandler::onNetworkTimeSynchronized()
+{
+	CALLBACK_BLOCK_BEGIN
+
+	std::string json_str = "{}";
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCVideoEventHandler::onLicenseWillExpire(int days)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	js["days"] = days;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
+void MyRTCVideoEventHandler::onExternalScreenFrameUpdate(bytertc::FrameUpdateInfo frameUpdateInfo)
+{
+	CALLBACK_BLOCK_BEGIN
+
+	json js;
+	json js_info;
+	js_info["framerate"] = frameUpdateInfo.framerate;
+	js_info["pixel"] = frameUpdateInfo.pixel;
+
+	js["frame_update_info"] = js_info;
+
+	std::string json_str = js.dump(JSON_INDENT);
+
+	CALLBACK_BLOCK_END
+}
+
 void MyRTCVideoEventHandler::onRemoteVideoSuperResolutionModeChanged(bytertc::RemoteStreamKey stream_key,
 	bytertc::VideoSuperResolutionMode mode, bytertc::VideoSuperResolutionModeChangedReason reason)
 {
 	CALLBACK_BLOCK_BEGIN
 
-	json js;
+		json js;
 	json js_stream_key;
 	js_stream_key["room_id"] = stream_key.room_id;
 	js_stream_key["stream_index"] = stream_key.stream_index;
