@@ -1115,7 +1115,7 @@ void MyRTCVideoEventHandler::onEchoTestResult(bytertc::EchoTestResult result)
 }
 
 void MyRTCVideoEventHandler::onPlayPublicStreamResult(const char* public_stream_id,
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 346000
 	bytertc::PublicStreamErrorCode errorCode
 #else
 	int errorCode
@@ -1134,7 +1134,7 @@ void MyRTCVideoEventHandler::onPlayPublicStreamResult(const char* public_stream_
 }
 
 void MyRTCVideoEventHandler::onPushPublicStreamResult(const char* room_id, const char* public_streamid,
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 346000
 	bytertc::PublicStreamErrorCode errorCode
 #else
 	int errorCode

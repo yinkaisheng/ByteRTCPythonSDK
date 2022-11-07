@@ -95,14 +95,18 @@ public:
 	void onCloudProxyConnected(int interval) override;
 	void onEchoTestResult(bytertc::EchoTestResult result) override;
 
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 346000
 	void onPlayPublicStreamResult(const char* public_stream_id, bytertc::PublicStreamErrorCode errorCode) override;
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, bytertc::PublicStreamErrorCode errorCode) override;
-	void onPublicStreamSEIMessageReceived(const char* public_stream_id,
-		const uint8_t* message, int message_length, bytertc::SEIMessageSourceType source_type) override;
 #else
 	void onPlayPublicStreamResult(const char* public_stream_id, int errorCode) override;
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, int errorCode) override;
+#endif
+
+#if BYTE_SDK_VERSION >= 347000
+	void onPublicStreamSEIMessageReceived(const char* public_stream_id,
+		const uint8_t* message, int message_length, bytertc::SEIMessageSourceType source_type) override;
+#else
 	void onPublicStreamSEIMessageReceived(const char* public_stream_id, const uint8_t* message, int message_length) override;
 #endif
 
