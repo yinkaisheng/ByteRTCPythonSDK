@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <ByteSdkVersionStr>3.44.101</ByteSdkVersionStr>
+    <ByteSdkVersionStr>3.46.103</ByteSdkVersionStr>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />

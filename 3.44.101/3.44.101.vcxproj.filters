@@ -32,6 +32,9 @@
     <ClCompile Include="..\src\MyRTCRoomEventHandler.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\MyVideoFrameObserver.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\util.h">
@@ -107,6 +110,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\MyRTCRoomEventHandler.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MyVideoFrameObserver.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

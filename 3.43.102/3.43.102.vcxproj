@@ -22,6 +22,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MyRTCRoomEventHandler.cpp" />
     <ClCompile Include="..\src\MyRTCVideoEventHandler.cpp" />
+    <ClCompile Include="..\src\MyVideoFrameObserver.cpp" />
     <ClCompile Include="..\src\util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +46,7 @@
     <ClInclude Include="..\src\common.h" />
     <ClInclude Include="..\src\MyRTCRoomEventHandler.h" />
     <ClInclude Include="..\src\MyRTCVideoEventHandler.h" />
+    <ClInclude Include="..\src\MyVideoFrameObserver.h" />
     <ClInclude Include="..\src\util.h" />
     <ClInclude Include="include\bytertc_room.h" />
     <ClInclude Include="include\bytertc_room_event_handler.h" />

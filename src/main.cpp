@@ -2,6 +2,7 @@
 #include "rtc/bytertc_advance.h"
 #include "MyRTCVideoEventHandler.h"
 #include "MyRTCRoomEventHandler.h"
+#include "MyVideoFrameObserver.h"
 #include "json/json.hpp"
 #include "spdlog/spdlog.h"
 
@@ -22,6 +23,22 @@ BYTERTC_API MyRTCVideoEventHandler* byte_createRTCVideoEventHandler()
 BYTERTC_API void byte_deleteRTCVideoEventHandler(MyRTCVideoEventHandler* handler)
 {
 	delete handler;
+}
+
+BYTERTC_API MyVideoFrameObserver* byte_createVideoFrameObserver()
+{
+	return new MyVideoFrameObserver();
+}
+
+BYTERTC_API void byte_deleteVideoFrameObserver(MyVideoFrameObserver* videoOb)
+{
+	delete videoOb;
+}
+
+BYTERTC_API void byte_VideoFrameObserver_saveFrame(MyVideoFrameObserver* videoOb,
+	SaveFrameType type, int save, unsigned int fileCount, unsigned int frameCount)
+{
+	videoOb->saveFrame(type, (bool)save, fileCount, frameCount);
 }
 
 BYTERTC_API void byte_RTCVideoEventHandler_setCallback(MyRTCVideoEventHandler* handler, ByteEventCallback callback)
@@ -112,6 +129,11 @@ BYTERTC_API uint8_t* byte_IVideoFrame_getPlaneData(bytertc::IVideoFrame* frame, 
 BYTERTC_API int byte_IVideoFrame_getPlaneStride(bytertc::IVideoFrame* frame, int plane_index)
 {
 	return frame->getPlaneStride(plane_index);
+}
+
+BYTERTC_API void byte_RTCVideo_registerVideoFrameObserver(bytertc::IRTCVideo* rtc_video, MyVideoFrameObserver* videoOb)
+{
+	rtc_video->registerVideoFrameObserver(videoOb);
 }
 
 BYTERTC_API int byte_RTCVideo_setLocalVideoCanvas(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex index,
