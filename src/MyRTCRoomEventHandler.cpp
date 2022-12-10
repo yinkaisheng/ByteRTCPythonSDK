@@ -19,11 +19,16 @@ void MyRTCRoomEventHandler::onRoomStateChanged(const char* room_id, const char* 
 {
 	CALLBACK_BLOCK_BEGIN
 
+	if (extra_info == nullptr || extra_info[0] == '\0')
+	{
+		extra_info = "{}";
+	}
+
 	json js;
 	js["room_id"] = room_id;
 	js["user_id"] = user_id;
 	js["state"] = state;
-	js["extra_info"] = extra_info;
+	js["extra_info"] = json::parse(extra_info);
 
 	std::string json_str = js.dump(JSON_INDENT);
 
@@ -34,11 +39,16 @@ void MyRTCRoomEventHandler::onStreamStateChanged(const char* room_id, const char
 {
 	CALLBACK_BLOCK_BEGIN
 
+	if (extra_info == nullptr || extra_info[0] == '\0')
+	{
+		extra_info = "{}";
+	}
+
 	json js;
 	js["room_id"] = room_id;
 	js["user_id"] = user_id;
 	js["state"] = state;
-	js["extra_info"] = extra_info;
+	js["extra_info"] = json::parse(extra_info);
 
 	std::string json_str = js.dump(JSON_INDENT);
 
@@ -238,10 +248,16 @@ void MyRTCRoomEventHandler::onUserJoined(const bytertc::UserInfo& user_info, int
 {
 	CALLBACK_BLOCK_BEGIN
 
+	const char* extra_info = user_info.extra_info;
+	if (extra_info == nullptr || extra_info[0] == '\0')
+	{
+		extra_info = "{}";
+	}
+
 	json js;
 	json js_user_info;
 	js_user_info["uid"] = user_info.uid;
-	js_user_info["extra_info"] = user_info.extra_info;
+	js_user_info["extra_info"] = json::parse(extra_info);
 	js["user_info"] = js_user_info;
 	js["elapsed"] = elapsed;
 

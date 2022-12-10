@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <string>
+using namespace std::literals::chrono_literals;
 
 std::string readLine(const std::string& tip = "") {
     std::cout << tip << std::endl;
@@ -96,9 +97,26 @@ public:
     }
 };
 
+int64_t MillionSecondsSinceEpoch() {
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    int64_t seconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    return seconds;
+}
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    int64_t time = 0;
+    int64_t now = 0;
+    for (int n = 0; n < 100; ++n)
+    {
+        now = MillionSecondsSinceEpoch();
+        std::cout << "elapsed " << now - time << " ms\n";
+        time = now;
+        std::this_thread::sleep_for(2000ms);
+    }
+
+    std::string str;
+    std::getline(std::cin, str);
     Demo demo;
     demo.test();
 }

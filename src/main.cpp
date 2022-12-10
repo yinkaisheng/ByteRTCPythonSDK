@@ -366,10 +366,12 @@ BYTERTC_API void byte_RTCVideo_setLocalVideoMirrorType(bytertc::IRTCVideo* rtc_v
 	rtc_video->setLocalVideoMirrorType(mirror_type);
 }
 
+#if BYTE_SDK_VERSION >= 344000
 BYTERTC_API void byte_RTCVideo_setVideoOrientation(bytertc::IRTCVideo* rtc_video, bytertc::VideoOrientation orientation)
 {
 	rtc_video->setVideoOrientation(orientation);
 }
+#endif
 
 BYTERTC_API int byte_RTCVideo_enableEffectBeauty(bytertc::IRTCVideo* rtc_video, int enable)
 {
@@ -411,6 +413,18 @@ BYTERTC_API void byte_RTCVideo_startScreenVideoCapture(bytertc::IRTCVideo* rtc_v
 BYTERTC_API void byte_RTCVideo_stopScreenVideoCapture(bytertc::IRTCVideo* rtc_video)
 {
 	rtc_video->stopScreenVideoCapture();
+}
+
+BYTERTC_API bytertc::IVideoFrame* byte_RTCVideo_getThumbnail(bytertc::IRTCVideo* rtc_video, bytertc::ScreenCaptureSourceType type,
+	void* source_id, int max_width, int max_height)
+{
+	return rtc_video->getThumbnail(type, source_id, max_width, max_height);
+}
+
+BYTERTC_API bytertc::IVideoFrame* byte_RTCVideo_getWindowAppIcon(bytertc::IRTCVideo* rtc_video,
+	void* source_id, int max_width, int max_height)
+{
+	return rtc_video->getWindowAppIcon(source_id, max_width, max_height);
 }
 
 BYTERTC_API void byte_RTCVideo_setScreenAudioSourceType(bytertc::IRTCVideo* rtc_video, bytertc::AudioSourceType source_type)

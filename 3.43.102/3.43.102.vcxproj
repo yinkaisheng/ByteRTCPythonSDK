@@ -58,7 +58,7 @@
     <ProjectGuid>{144643D6-F2EC-11EC-9890-2A39265D5855}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ByteRTCPythonSDK</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
