@@ -639,6 +639,21 @@ BYTERTC_API void byte_RTCRoom_setRemoteVideoConfig(bytertc::IRTCRoom* rtc_room, 
 }
 #endif
 
+BYTERTC_API int byte_RTCRoom_startForwardStreamToRooms(bytertc::IRTCRoom* rtc_room, bytertc::ForwardStreamConfiguration* config)
+{
+	return rtc_room->startForwardStreamToRooms(*config);
+}
+
+BYTERTC_API int byte_RTCRoom_updateForwardStreamToRooms(bytertc::IRTCRoom* rtc_room, bytertc::ForwardStreamConfiguration* config)
+{
+	return rtc_room->updateForwardStreamToRooms(*config);
+}
+
+BYTERTC_API void byte_RTCRoom_stopForwardStreamToRooms(bytertc::IRTCRoom* rtc_room)
+{
+	rtc_room->stopForwardStreamToRooms();
+}
+
 BYTERTC_API int64_t byte_RTCRoom_sendRoomMessage(bytertc::IRTCRoom* rtc_room, const char* message)
 {
 	return rtc_room->sendRoomMessage(message);

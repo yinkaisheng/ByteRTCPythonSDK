@@ -1,6 +1,7 @@
 #include "util.h"
 #include <windows.h>
 #include <memory>
+#include <chrono>
 #include <io.h>
 
 #define STRING_BUFFER_SIZE 512
@@ -55,7 +56,7 @@ bool MakeDirsExist(std::wstring_view path)
     return true;
 }
 
-std::wstring Ansi2Wide(std::string_view ansi)
+std::wstring AnsiToWide(std::string_view ansi)
 {
     //if the 3rd parameter is -1, the return len includes \0
     int len = MultiByteToWideChar(CP_ACP, 0, ansi.data(), ansi.size(), nullptr, 0);
@@ -71,14 +72,14 @@ std::wstring Ansi2Wide(std::string_view ansi)
     return result.get();
 }
 
-int Ansi2Wide(std::string_view ansi, wchar_t* wszOut, int outSize)
+int AnsiToWide(std::string_view ansi, wchar_t* wszOut, int outSize)
 {
     int len = MultiByteToWideChar(CP_ACP, 0, ansi.data(), ansi.size(), wszOut, outSize-1);
     wszOut[len] = 0;
     return len;
 }
 
-std::string Wide2Ansi(std::wstring_view wide)
+std::string WideToAnsi(std::wstring_view wide)
 {
     int len = WideCharToMultiByte(CP_ACP, 0, wide.data(), wide.size(), nullptr, 0, nullptr, nullptr);
     if (len == 0)
@@ -93,14 +94,14 @@ std::string Wide2Ansi(std::wstring_view wide)
     return result.get();
 }
 
-int Wide2Ansi(std::wstring_view wide, char* szOut, int outSize)
+int WideToAnsi(std::wstring_view wide, char* szOut, int outSize)
 {
     int len = WideCharToMultiByte(CP_ACP, 0, wide.data(), wide.size(), szOut, outSize-1, nullptr, nullptr);
     szOut[len] = 0;
     return len;
 }
 
-std::wstring Utf82Wide(std::string_view utf8)
+std::wstring Utf8ToWide(std::string_view utf8)
 {
     int len = MultiByteToWideChar(CP_UTF8, 0, utf8.data(), utf8.size(), nullptr, 0);
     if (len == 0)
@@ -114,14 +115,14 @@ std::wstring Utf82Wide(std::string_view utf8)
     return result.get();
 }
 
-int Utf82Wide(std::string_view utf8, wchar_t* wszOut, int outSize)
+int Utf8ToWide(std::string_view utf8, wchar_t* wszOut, int outSize)
 {
     int len = MultiByteToWideChar(CP_UTF8, 0, utf8.data(), utf8.size(), wszOut, outSize-1);
     wszOut[len] = 0;
     return len;
 }
 
-std::string Wide2Utf8(std::wstring_view wide)
+std::string WideToUtf8(std::wstring_view wide)
 {
     int len = WideCharToMultiByte(CP_UTF8, 0, wide.data(), wide.size(), nullptr, 0, nullptr, nullptr);
     if (len == 0)
@@ -136,31 +137,31 @@ std::string Wide2Utf8(std::wstring_view wide)
     return result.get();
 }
 
-int Wide2Utf8(std::wstring_view wide, char* szOut, int outSize)
+int WideToUtf8(std::wstring_view wide, char* szOut, int outSize)
 {
     int len = WideCharToMultiByte(CP_UTF8, 0, wide.data(), wide.size(), szOut, outSize-1, nullptr, nullptr);
     szOut[len] = 0;
     return len;
 }
 
-std::string Ansi2Utf8(std::string_view ansi)
+std::string AnsiToUtf8(std::string_view ansi)
 {
-    return Wide2Utf8(Ansi2Wide(ansi));
+    return WideToUtf8(AnsiToWide(ansi));
 }
 
-int Ansi2Utf8(std::string_view ansi, char* szOut, int outSize)
+int AnsiToUtf8(std::string_view ansi, char* szOut, int outSize)
 {
-    return Wide2Utf8(Ansi2Wide(ansi), szOut, outSize);
+    return WideToUtf8(AnsiToWide(ansi), szOut, outSize);
 }
 
-std::string Utf82Ansi(std::string_view ansi)
+std::string Utf8ToAnsi(std::string_view ansi)
 {
-    return Wide2Ansi(Utf82Wide(ansi));
+    return WideToAnsi(Utf8ToWide(ansi));
 }
 
-int Utf82Ansi(std::string_view ansi, char* szOut, int outSize)
+int Utf8ToAnsi(std::string_view ansi, char* szOut, int outSize)
 {
-    return Wide2Ansi(Utf82Wide(ansi), szOut, outSize);
+    return WideToAnsi(Utf8ToWide(ansi), szOut, outSize);
 }
 
 long long EpochMicroseconds()
@@ -179,6 +180,12 @@ long long EpochMicroseconds()
     return ts.QuadPart / 10;
 }
 
+int64_t MillisecondsSinceSystemStart()
+{
+	auto duration = std::chrono::steady_clock::now().time_since_epoch();
+	int64_t milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+	return milliseconds;
+}
 
 std::string String::format(std::string_view format, ...)
 {

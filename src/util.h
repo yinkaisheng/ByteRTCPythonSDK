@@ -9,31 +9,33 @@ bool IsPathExist(const wchar_t* path);
 
 bool MakeDirsExist(std::wstring_view path);
 
-std::wstring Ansi2Wide(std::string_view ansi);
+std::wstring AnsiToWide(std::string_view ansi);
 
-int Ansi2Wide(std::string_view ansi, wchar_t* wszOut, int outSize);
+int AnsiToWide(std::string_view ansi, wchar_t* wszOut, int outSize);
 
-std::string Wide2Ansi(std::wstring_view wide);
+std::string WideToAnsi(std::wstring_view wide);
 
-int Wide2Ansi(std::wstring_view wide, char* szOut, int outSize);
+int WideToAnsi(std::wstring_view wide, char* szOut, int outSize);
 
-std::wstring Utf82Wide(std::string_view utf8);
+std::wstring Utf8ToWide(std::string_view utf8);
 
-int Utf82Wide(std::string_view utf8, wchar_t* wszOut, int outSize);
+int Utf8ToWide(std::string_view utf8, wchar_t* wszOut, int outSize);
 
-std::string Wide2Utf8(std::wstring_view wide);
+std::string WideToUtf8(std::wstring_view wide);
 
-int Wide2Utf8(std::wstring_view wide, char* szOut, int outSize);
+int WideToUtf8(std::wstring_view wide, char* szOut, int outSize);
 
-std::string Ansi2Utf8(std::string_view ansi);
+std::string AnsiToUtf8(std::string_view ansi);
 
-int Ansi2Utf8(std::string_view ansi, char* szOut, int outSize);
+int AnsiToUtf8(std::string_view ansi, char* szOut, int outSize);
 
-std::string Utf82Ansi(std::string_view ansi);
+std::string Utf8ToAnsi(std::string_view ansi);
 
-int Utf82Ansi(std::string_view ansi, char* szOut, int outSize);
+int Utf8ToAnsi(std::string_view ansi, char* szOut, int outSize);
 
 long long EpochMicroseconds();
+
+int64_t MillisecondsSinceSystemStart();
 
 class String
 {
