@@ -28,7 +28,10 @@ void MyVideoFrameObserver::saveVideoFrame(const char* fileName, const char* mode
 	auto fmt = videoFrame->pixelFormat();
 	if (!(fmt == bytertc::kVideoPixelFormatI420
 		|| fmt == bytertc::kVideoPixelFormatNV12
-		|| fmt == bytertc::kVideoPixelFormatNV21))
+		|| fmt == bytertc::kVideoPixelFormatNV21
+		|| fmt == bytertc::kVideoPixelFormatARGB
+		|| fmt == bytertc::kVideoPixelFormatRGBA
+		|| fmt == bytertc::kVideoPixelFormatBGRA))
 	{
 		return;
 	}
@@ -44,18 +47,22 @@ void MyVideoFrameObserver::saveVideoFrame(const char* fileName, const char* mode
 		int ustride = videoFrame->getPlaneStride(1);
 		int vstride = videoFrame->getPlaneStride(2);
 
-		if (ystride == width)
+		if (ystride == width || ystride == width*4)
 		{
 			if (fmt == bytertc::kVideoPixelFormatI420)
 			{
-				fwrite(pY, width * height, 1, pFile);
-				fwrite(pU, width * height / 4, 1, pFile);
-				fwrite(pV, width * height / 4, 1, pFile);
+				fwrite(pY, ystride * height, 1, pFile);
+				fwrite(pU, ystride * height / 4, 1, pFile);
+				fwrite(pV, ystride * height / 4, 1, pFile);
 			}
-			else
+			else if (fmt == bytertc::kVideoPixelFormatNV12 || fmt == bytertc::kVideoPixelFormatNV21)
 			{
-				fwrite(pY, width * height, 1, pFile);
-				fwrite(pU, width * height / 2, 1, pFile);
+				fwrite(pY, ystride * height, 1, pFile);
+				fwrite(pU, ystride * height / 2, 1, pFile);
+			}
+			else // rgb32
+			{
+				fwrite(pY, ystride * height, 1, pFile);
 			}
 		}
 		else
@@ -78,7 +85,7 @@ void MyVideoFrameObserver::saveVideoFrame(const char* fileName, const char* mode
 					}
 				}
 			}
-			else
+			else if (fmt == bytertc::kVideoPixelFormatNV12 || fmt == bytertc::kVideoPixelFormatNV21)
 			{
 				for (int h = 0; h < height; ++h)
 				{
@@ -89,12 +96,19 @@ void MyVideoFrameObserver::saveVideoFrame(const char* fileName, const char* mode
 					}
 				}
 			}
+			else // rgb32
+			{
+				for (int h = 0; h < height; ++h)
+				{
+					memcpy(pDstY + width * h * 4, pY + ystride * h, width*4);
+				}
+			}
 			fwrite(pDstY, frameSize, 1, pFile);
 		}
 	}
 }
 
-void MyVideoFrameObserver::saveVideoFrame(const char* funcName, SaveFrameInfo& info, bytertc::IVideoFrame* videoFrame)
+void MyVideoFrameObserver::saveVideoFrame(const char* funcName, const char* uid, SaveFrameInfo& info, bytertc::IVideoFrame* videoFrame)
 {
 	if (!info.save)
 	{
@@ -110,14 +124,22 @@ void MyVideoFrameObserver::saveVideoFrame(const char* funcName, SaveFrameInfo& i
 	int width = videoFrame->width();
 	int height = videoFrame->height();
 	bytertc::VideoPixelFormat format = videoFrame->pixelFormat();
-	std::string ext = "i420";
+	std::string ext = "raw";
 	if (format == bytertc::kVideoPixelFormatARGB)
 	{
 		ext = "argb";
 	}
+	if (format == bytertc::kVideoPixelFormatRGBA)
+	{
+		ext = "rgba";
+	}
 	else if (format == bytertc::kVideoPixelFormatBGRA)
 	{
 		ext = "bgra";
+	}
+	else if (format == bytertc::kVideoPixelFormatI420)
+	{
+		ext = "i420";
 	}
 	else if (format == bytertc::kVideoPixelFormatNV12)
 	{
@@ -127,8 +149,17 @@ void MyVideoFrameObserver::saveVideoFrame(const char* funcName, SaveFrameInfo& i
 	{
 		ext = "nv21";
 	}
+
 	char szName[128]{};
-	std::snprintf(szName, sizeof(szName), "%s%u_%dx%d.%s", funcName, info.currentFileNo, width, height, ext.c_str());
+	if (uid)
+	{
+		std::snprintf(szName, sizeof(szName), "%s_uid_%s_%u_%dx%d.%s", funcName, uid, info.currentFileNo, width, height, ext.c_str());
+	}
+	else
+	{
+		std::snprintf(szName, sizeof(szName), "%s_%u_%dx%d.%s", funcName, info.currentFileNo, width, height, ext.c_str());
+	}
+
 	saveVideoFrame(szName, info.curFrameCount == 0 ? "wb" : "ab+", videoFrame);
 	++info.curFrameCount;
 	if (info.curFrameCount >= info.fileFrameCount)
@@ -142,7 +173,7 @@ bool MyVideoFrameObserver::onLocalScreenFrame(bytertc::IVideoFrame* videoFrame)
 {
 	SaveFrameType type = kSaveLocalScreenFrame;
 	SaveFrameInfo& info = m_frameInfo[type];
-	saveVideoFrame(__FUNCTION__, info, videoFrame);
+	saveVideoFrame(__FUNCTION__, nullptr, info, videoFrame);
 	return true;
 }
 
@@ -150,7 +181,7 @@ bool MyVideoFrameObserver::onLocalVideoFrame(bytertc::IVideoFrame* videoFrame)
 {
 	SaveFrameType type = kSaveLocalVideoFrame;
 	SaveFrameInfo& info = m_frameInfo[type];
-	saveVideoFrame(__FUNCTION__, info, videoFrame);
+	saveVideoFrame(__FUNCTION__, nullptr, info, videoFrame);
 	return true;
 }
 
@@ -158,7 +189,7 @@ bool MyVideoFrameObserver::onRemoteScreenFrame(const char* roomid, const char* u
 {
 	SaveFrameType type = kSaveRemoteScreenFrame;
 	SaveFrameInfo& info = m_frameInfo[type];
-	saveVideoFrame(__FUNCTION__, info, videoFrame);
+	saveVideoFrame(__FUNCTION__, uid, info, videoFrame);
 	return true;
 }
 
@@ -166,7 +197,7 @@ bool MyVideoFrameObserver::onRemoteVideoFrame(const char* roomid, const char* ui
 {
 	SaveFrameType type = kSaveRemoteVideoFrame;
 	SaveFrameInfo& info = m_frameInfo[type];
-	saveVideoFrame(__FUNCTION__, info, videoFrame);
+	saveVideoFrame(__FUNCTION__, uid, info, videoFrame);
 	return true;
 }
 
@@ -174,6 +205,6 @@ bool MyVideoFrameObserver::onMergeFrame(const char* roomid, const char* uid, byt
 {
 	SaveFrameType type = kSaveMergeFrame;
 	SaveFrameInfo& info = m_frameInfo[type];
-	saveVideoFrame(__FUNCTION__, info, videoFrame);
+	saveVideoFrame(__FUNCTION__, uid, info, videoFrame);
 	return true;
 }

@@ -31,7 +31,7 @@ public:
 
     void saveVideoFrame(const char* fileName, const char* mode, bytertc::IVideoFrame* videoFrame);
 
-    void saveVideoFrame(const char* funcName, SaveFrameInfo& info, bytertc::IVideoFrame* videoFrame);
+    void saveVideoFrame(const char* funcName, const char* uid, SaveFrameInfo& info, bytertc::IVideoFrame* videoFrame);
 
     bool onLocalScreenFrame(bytertc::IVideoFrame* videoFrame) override;
 
