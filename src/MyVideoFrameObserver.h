@@ -22,7 +22,8 @@ struct SaveFrameInfo
     bool save;
 };
 
-class MyVideoFrameObserver : public bytertc::IVideoFrameObserver {
+class MyVideoFrameObserver : public bytertc::IVideoFrameObserver
+{
 public:
     MyVideoFrameObserver();
     virtual ~MyVideoFrameObserver();
@@ -43,5 +44,23 @@ public:
 
     bool onMergeFrame(const char* roomid, const char* uid, bytertc::IVideoFrame* videoFrame) override;
 private:
-    SaveFrameInfo m_frameInfo[kSaveFrameTypeCount];
+    SaveFrameInfo _frameInfo[kSaveFrameTypeCount];
+};
+
+class MyLocalEncodedVideoFrameObserver : public bytertc::ILocalEncodedVideoFrameObserver
+{
+public:
+    void saveFrame(bool save);
+    void onLocalEncodedVideoFrame(bytertc::StreamIndex type, const bytertc::IEncodedVideoFrame& video_stream) override;
+private:
+    bool _save{};
+};
+
+class MyRemoteEncodedVideoFrameObserver : public bytertc::IRemoteEncodedVideoFrameObserver
+{
+public:
+    void saveFrame(bool save);
+    void onRemoteEncodedVideoFrame(const bytertc::RemoteStreamKey& stream_info, const bytertc::IEncodedVideoFrame& video_stream) override;
+private:
+    bool _save{};
 };

@@ -25,6 +25,7 @@ BYTERTC_API void byte_deleteRTCVideoEventHandler(MyRTCVideoEventHandler* handler
 	delete handler;
 }
 
+
 BYTERTC_API MyVideoFrameObserver* byte_createVideoFrameObserver()
 {
 	return new MyVideoFrameObserver();
@@ -40,6 +41,39 @@ BYTERTC_API void byte_VideoFrameObserver_saveFrame(MyVideoFrameObserver* videoOb
 {
 	videoOb->saveFrame(type, (bool)save, fileCount, frameCount);
 }
+
+
+BYTERTC_API MyLocalEncodedVideoFrameObserver* byte_createLocalEncodedVideoFrameObserver()
+{
+	return new MyLocalEncodedVideoFrameObserver();
+}
+
+BYTERTC_API void byte_deleteLocalEncodedVideoFrameObserver(MyLocalEncodedVideoFrameObserver* videoOb)
+{
+	delete videoOb;
+}
+
+BYTERTC_API void byte_LocalEncodedVideoFrameObserver_saveFrame(MyLocalEncodedVideoFrameObserver* videoOb, int save)
+{
+	videoOb->saveFrame((bool)save);
+}
+
+
+BYTERTC_API MyRemoteEncodedVideoFrameObserver* byte_createRemoteEncodedVideoFrameObserver()
+{
+	return new MyRemoteEncodedVideoFrameObserver();
+}
+
+BYTERTC_API void byte_deleteRemoteEncodedVideoFrameObserver(MyRemoteEncodedVideoFrameObserver* videoOb)
+{
+	delete videoOb;
+}
+
+BYTERTC_API void byte_RemoteEncodedVideoFrameObserver_saveFrame(MyRemoteEncodedVideoFrameObserver* videoOb, int save)
+{
+	videoOb->saveFrame((bool)save);
+}
+
 
 BYTERTC_API void byte_RTCVideoEventHandler_setCallback(MyRTCVideoEventHandler* handler, ByteEventCallback callback)
 {
@@ -134,6 +168,16 @@ BYTERTC_API int byte_IVideoFrame_getPlaneStride(bytertc::IVideoFrame* frame, int
 BYTERTC_API void byte_RTCVideo_registerVideoFrameObserver(bytertc::IRTCVideo* rtc_video, MyVideoFrameObserver* videoOb)
 {
 	rtc_video->registerVideoFrameObserver(videoOb);
+}
+
+BYTERTC_API void byte_RTCVideo_registerLocalEncodedVideoFrameObserver(bytertc::IRTCVideo* rtc_video, MyLocalEncodedVideoFrameObserver* videoOb)
+{
+	rtc_video->registerLocalEncodedVideoFrameObserver(videoOb);
+}
+
+BYTERTC_API void byte_RTCVideo_registerRemoteEncodedVideoFrameObserver(bytertc::IRTCVideo* rtc_video, MyRemoteEncodedVideoFrameObserver* videoOb)
+{
+	rtc_video->registerRemoteEncodedVideoFrameObserver(videoOb);
 }
 
 BYTERTC_API int byte_RTCVideo_setLocalVideoCanvas(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex index,

@@ -1203,7 +1203,7 @@ void MyRTCVideoEventHandler::onTakeLocalSnapshotResult(long taskId, bytertc::Str
 	js["taskId"] = taskId;
 	js["stream_index"] = stream_index;
 	js["error_code"] = error_code;
-	js["video_frame"] = (size_t)video_frame->shallowCopy();
+	js["video_frame"] = video_frame ? (size_t)video_frame->shallowCopy() : 0;
 
 	std::string json_str = js.dump(JSON_INDENT);
 
@@ -1222,7 +1222,7 @@ void MyRTCVideoEventHandler::onTakeRemoteSnapshotResult(long taskId, bytertc::Re
 	js_stream_key["user_id"] = stream_key.user_id;
 	js["stream_key"] = js_stream_key;
 	js["error_code"] = error_code;
-	js["video_frame"] = (size_t)video_frame->shallowCopy();
+	js["video_frame"] = video_frame ? (size_t)video_frame->shallowCopy() : 0;
 
 	std::string json_str = js.dump(JSON_INDENT);
 
