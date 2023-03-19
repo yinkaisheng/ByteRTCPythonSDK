@@ -3,6 +3,21 @@
 #include <string_view>
 #include <vector>
 
+template<typename Function>
+struct FinalAction
+{
+    FinalAction(Function func) : cleaner{ func } {}
+    ~FinalAction() { cleaner(); }
+    Function cleaner;
+};
+
+template<typename Function>
+FinalAction<Function> finallyDo(Function func)
+{
+    return FinalAction<Function>(func);
+}
+
+
 bool IsPathExist(const char* path);
 
 bool IsPathExist(const wchar_t* path);

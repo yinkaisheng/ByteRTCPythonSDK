@@ -405,6 +405,24 @@ BYTERTC_API void byte_RTCVideo_stopVideoCapture(bytertc::IRTCVideo* rtc_video)
 	rtc_video->stopVideoCapture();
 }
 
+BYTERTC_API void byte_RTCVideo_setVideoWatermark(bytertc::IRTCVideo* rtc_video,
+	bytertc::StreamIndex stream_index, const char* image_path, bytertc::RTCWatermarkConfig* config)
+{
+	rtc_video->setVideoWatermark(stream_index, image_path, *config);
+}
+
+BYTERTC_API void byte_RTCVideo_clearVideoWatermark(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex stream_index)
+{
+	rtc_video->clearVideoWatermark(stream_index);
+}
+
+#if BYTE_SDK_VERSION >= 346000
+BYTERTC_API int byte_RTCVideo_setDummyCaptureImagePath(bytertc::IRTCVideo* rtc_video, const char* file_path)
+{
+	return rtc_video->setDummyCaptureImagePath(file_path);
+}
+#endif
+
 BYTERTC_API void byte_RTCVideo_setLocalVideoMirrorType(bytertc::IRTCVideo* rtc_video, bytertc::MirrorType mirror_type)
 {
 	rtc_video->setLocalVideoMirrorType(mirror_type);
