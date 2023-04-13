@@ -593,7 +593,7 @@ BYTERTC_API int byte_RTCVideo_enableSimulcastMode(bytertc::IRTCVideo* rtc_video,
 }
 #endif
 
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 347000 || (BYTE_SDK_VERSION >= 345701 && BYTE_SDK_VERSION < 346000)
 BYTERTC_API long byte_RTCVideo_takeLocalSnapshot(bytertc::IRTCVideo* rtc_video, bytertc::StreamIndex stream_index, MyRTCVideoEventHandler* callback) {
 	return rtc_video->takeLocalSnapshot(stream_index, callback);
 }

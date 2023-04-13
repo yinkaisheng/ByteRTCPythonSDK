@@ -3,7 +3,7 @@
 #include "common.h"
 
 class MyRTCVideoEventHandler : public bytertc::IRTCVideoEventHandler
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 347000 || (BYTE_SDK_VERSION >= 345701 && BYTE_SDK_VERSION < 346000)
 							 , public bytertc::ISnapshotResultCallback
 #endif
 {
@@ -114,7 +114,7 @@ public:
 	void onAudioDumpStateChanged(bytertc::AudioDumpStatus status) override;
 #endif
 
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 347000 || (BYTE_SDK_VERSION >= 345701 && BYTE_SDK_VERSION < 346000)
 	//ISnapshotResultCallback
 	void onTakeLocalSnapshotResult(long taskId, bytertc::StreamIndex stream_index, bytertc::IVideoFrame* frame, int errorCode) override;
 	void onTakeRemoteSnapshotResult(long taskId, bytertc::RemoteStreamKey stream_key, bytertc::IVideoFrame* frame, int errorCode) override;

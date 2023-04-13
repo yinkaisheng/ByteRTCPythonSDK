@@ -1194,7 +1194,7 @@ void MyRTCVideoEventHandler::onAudioDumpStateChanged(bytertc::AudioDumpStatus st
 }
 #endif
 
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 347000 || (BYTE_SDK_VERSION >= 345701 && BYTE_SDK_VERSION < 346000)
 void MyRTCVideoEventHandler::onTakeLocalSnapshotResult(long taskId, bytertc::StreamIndex stream_index, bytertc::IVideoFrame* video_frame, int error_code)
 {
 	CALLBACK_BLOCK_BEGIN
@@ -1273,7 +1273,7 @@ void MyRTCVideoEventHandler::onRemoteVideoSuperResolutionModeChanged(bytertc::Re
 {
 	CALLBACK_BLOCK_BEGIN
 
-		json js;
+	json js;
 	json js_stream_key;
 	js_stream_key["room_id"] = stream_key.room_id;
 	js_stream_key["stream_index"] = stream_key.stream_index;
