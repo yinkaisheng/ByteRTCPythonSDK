@@ -191,6 +191,13 @@ BYTERTC_API int byte_RTCVideo_setVideoCaptureConfig(bytertc::IRTCVideo* rtc_vide
 	return rtc_video->setVideoCaptureConfig(*capture_config);
 }
 
+#if BYTE_SDK_VERSION >= 351000
+BYTERTC_API void byte_RTCVideo_setVideoCaptureRotation(bytertc::IRTCVideo* rtc_video, bytertc::VideoRotation rotation)
+{
+	rtc_video->setVideoCaptureRotation(rotation);
+}
+#endif
+
 BYTERTC_API int byte_RTCVideo_setVideoEncoderConfig(bytertc::IRTCVideo* rtc_video, bytertc::VideoEncoderConfig* encode_config)
 {
 	return rtc_video->setVideoEncoderConfig(*encode_config);
