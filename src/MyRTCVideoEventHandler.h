@@ -103,7 +103,10 @@ public:
 	void onPushPublicStreamResult(const char* room_id, const char* public_streamid, int errorCode) override;
 #endif
 
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 352000
+	void onPublicStreamSEIMessageReceived(const char* public_stream_id,
+		const uint8_t* message, int message_length, bytertc::DataMessageSourceType source_type) override;
+#elif BYTE_SDK_VERSION >= 347000
 	void onPublicStreamSEIMessageReceived(const char* public_stream_id,
 		const uint8_t* message, int message_length, bytertc::SEIMessageSourceType source_type) override;
 #else

@@ -1155,7 +1155,9 @@ void MyRTCVideoEventHandler::onPushPublicStreamResult(const char* room_id, const
 
 void MyRTCVideoEventHandler::onPublicStreamSEIMessageReceived(const char* public_stream_id,
 	const uint8_t* message, int message_length
-#if BYTE_SDK_VERSION >= 347000
+#if BYTE_SDK_VERSION >= 352000
+	, bytertc::DataMessageSourceType source_type
+#elif BYTE_SDK_VERSION >= 347000
 	, bytertc::SEIMessageSourceType source_type
 #endif
 )

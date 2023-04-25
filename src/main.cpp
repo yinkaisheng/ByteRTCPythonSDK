@@ -6,6 +6,8 @@
 #include "json/json.hpp"
 #include "spdlog/spdlog.h"
 
+#pragma warning(disable:4996)
+
 #define LOGPTR spdlog::fmt_lib::ptr
 
 using namespace nlohmann;
